@@ -2,10 +2,11 @@ function courseplay:setNameVariable(workTool)
 	if workTool.cp == nil then
 		workTool.cp = {};
 	end;
-
+	
 	if workTool.cp.hasSpecializationPathVehicle or workTool.cp.hasSpecializationTrafficVehicle then
 		return;
 	end;
+
 
 	-- local specList = { 'AICombine', 'AITractor', 'AnimatedVehicle', 'BaleLoader', 'Baler', 'BunkerSiloCompacter', 'Combine', 'Cultivator', 'Cutter', 'Cylindered', 'Fillable', 'Foldable', 'FruitPreparer', 'FuelTrailer', 'MixerWagon', 'Mower', 'PathVehicle', 'Plough', 'Shovel', 'SowingMachine', 'Sprayer', 'Steerable', 'Tedder', 'TrafficVehicle', 'Trailer', 'WaterTrailer', 'Windrower' };
 
@@ -87,12 +88,6 @@ function courseplay:setNameVariable(workTool)
 			workTool.cp.isHorschTitan34UW = true;
 			workTool.cp.foldPipeAtWaitPoint = true;
 		end;
-	elseif workTool.cp.xmlFileName == 'holmerSugarBeetTank.xml' then
-			workTool.cp.isAugerWagon = true;
-			workTool.cp.isHolmerSugarbeetTank = true;
-	elseif workTool.cp.xmlFileName == 'holmerGrainTank.xml' then
-			workTool.cp.isAugerWagon = true;
-			workTool.cp.isHolmerGrainTank = true;			
 	elseif workTool.cp.hasSpecializationOverloader then
 		workTool.cp.isAugerWagon = true;
 		workTool.cp.hasSpecializationOverloaderV2 = workTool.overloaderVersion ~= nil and workTool.overloaderVersion >= 2;
@@ -129,7 +124,11 @@ function courseplay:setNameVariable(workTool)
 	elseif workTool.animationParts ~= nil and workTool.animationParts[2] ~= nil and workTool.toggleUnloadingState ~= nil and workTool.setUnloadingState ~= nil then
 		workTool.cp.isAugerWagon = true;
 		workTool.cp.isTaarupShuttle = true;
-
+		
+	elseif workTool.typeName == 'FSM_Truck_Trailer.UBTTrailer' then
+		workTool.cp.isFlieglDPWxxx = true
+		workTool.cp.isSpecialBaleLoader = true
+		--print("got ubt spec");
 
 	-- ###########################################################
 	-- ###########################################################
@@ -137,42 +136,24 @@ function courseplay:setNameVariable(workTool)
 
 	-- MODS
 	-- [1] MOD COMBINES
-	elseif workTool.cp.xmlFileName == 'RopaEuroTiger_V8_3_XL.xml' then
-		workTool.cp.isRopaEuroTiger = true;
+
 
 	-- ###########################################################
 
 	-- [2] MOD TRACTORS
-	elseif workTool.cp.xmlFileName == 'holmerTerraVariant.xml' then
-		workTool.cp.isHolmerTerraVariant = true;
-		workTool.cp.isHolmerDlcCrabSteeringPossible = true;
-		workTool.cp.ridgeMarkerIndex = 1 ;
+
+
 	-- ###########################################################
 
 	-- [3] MOD TRAILERS
-
-
+		--MilkTruck
+		elseif workTool.typeName == 'US_Trailer_10.Milk Trailer' then
+			workTool.cp.isMilkTrailer = true;
+			--print("isMilkTrailer");
 	-- ###########################################################
 
 	-- [4] MOD MANURE / LIQUID MANURE
-	elseif workTool.cp.xmlFileName == 'zunhammerTV.xml' then
-		workTool.cp.isZunhammerTV = true;
-		workTool.cp.isLiquidManureOverloader = true;
-		workTool.cp.isHolmerDlcCrabSteeringPossible = true;
-		if workTool.attacherVehicle ~= nil then
-			workTool.cp.isHolmerDlcCrabSteeringPossible = true;
-		end
-	elseif workTool.cp.xmlFileName == 'zunhammerVibro.xml' then
-		workTool.cp.isZunhammerVibro = true;
-		
-	elseif workTool.cp.xmlFileName == 'bergmannTSWA19.xml' then
-		workTool.cp.ISBergmannTSWA19 = true
-		workTool.cp.mode9TrafficIgnoreVehicle = true
-		workTool.cp.isHolmerDlcCrabSteeringPossible = true;
-		if workTool.attacherVehicle ~= nil then
-			workTool.attacherVehicle.cp.mode9TrafficIgnoreVehicle = true
-			workTool.cp.isHolmerDlcCrabSteeringPossible = true;
-		end
+
 
 	-- ###########################################################
 
@@ -233,17 +214,6 @@ function courseplay:setNameVariable(workTool)
 		workTool.cp.isHarvesterSteerable = true;
 		workTool.cp.isGrimmeTectron415 = true;
 		workTool.cp.directionNodeZOffset = 2.3;
-
-	elseif workTool.cp.xmlFileName == 'holmerTerraDosT4_40.xml' then
-		workTool.cp.isHarvesterSteerable = true;
-		workTool.cp.isHolmerTerraDosT4_40 = true;
-		workTool.cp.isHolmerDlcCrabSteeringPossible = true;
-		workTool.cp.pipeSide = 1;
-		workTool.cp.ridgeMarkerIndex = 6;
-		
-	elseif workTool.cp.xmlFileName == 'holmerHR9.xml' then
-		workTool.cp.isHolmerHR9 = true;
-		workTool.cp.isHolmerDlcCrabSteeringPossible = true;
 
 	-- Harvesters (attachable) [Giants]
 	elseif workTool.cp.xmlFileName == 'grimmeRootster604.xml' then
@@ -443,6 +413,12 @@ function courseplay:isSpecialBaleLoader(workTool)
 	return false;
 end;
 
+function courseplay:isSpecialMilkTrailer(workTool)
+	if workTool.cp.isMilkTrailer then
+		return true
+	end;
+end;
+
 function courseplay:isSpecialCombine(workTool, specialType, fileNames)
 	if specialType ~= nil then
 		if specialType == "sugarBeetLoader" then
@@ -461,13 +437,33 @@ function courseplay:isSpecialCombine(workTool, specialType, fileNames)
 	return false;
 end
 
+
 function courseplay:handleSpecialTools(self,workTool,unfold,lower,turnOn,allowedToDrive,cover,unload,ridgeMarker,forceSpeedLimit)
-	local forcedStop = not unfold and not lower and not turnOn and not allowedToDriveacover and not unload and not ridgeMarker and forceSpeedLimit ==0;   
 	local implementsDown = lower and turnOn
 	if workTool.PTOId then
 		workTool:setPTO(false)
 	end;
-
+	--MilkTanker US_Trailer_10
+	if workTool.cp.isMilkTrailer then
+		if unload then
+			workTool.isMilchTrailerBuyMilk = unload
+		end;
+		--print("near trigger")
+		--print(workTool.isNearMilktruckFillTrigger)
+		if workTool.isNearMilktruckFillTrigger then
+			if g_currentMission.husbandries.cow.fillLevelMilk then
+				workTool.isMilchTrailerFilling = true
+			end;
+			allowedToDrive = false
+			--print(workTool.fillLevel);
+		end;
+		if workTool.doneFilling and self.cp.tipperFillLevelPct > 0 then
+			--print("done filling")
+			
+			allowedToDrive = true;
+		end;
+		return true, allowedToDrive;
+	end;
 	--Ursus Z586 BaleWrapper
 	if workTool.cp.isUrsusZ586 then
 		if workTool.baleWrapperState == 4 then
@@ -480,12 +476,17 @@ function courseplay:handleSpecialTools(self,workTool,unfold,lower,turnOn,allowed
 		return false ,allowedToDrive,forceSpeedLimit;
 		
 		
-	elseif workTool.isFlieglDPWxxx then
+	elseif workTool.cp.isFlieglDPWxxx then
+		workTool.cp.tipperFillLevel = workTool
 		if forceSpeedLimit ~= nil and workTool.maxSpeedLimit ~= nil then 
 			forceSpeedLimit = math.min(forceSpeedLimit, workTool.maxSpeedLimit-1)
 		end
-		if not workTool.automaticLoading then
-			workTool.automaticLoading = true
+		if workTool.capacity == nil or (workTool.capacity ~= nil and workTool.capacity ~= workTool.fillLevelMax) then
+			workTool.capacity = workTool.fillLevelMax;
+			workTool.realBaseCapacity = workTool.fillLevelMax;
+		end;
+		if not workTool.autoLoad then
+			workTool.autoLoad = true
 		end
 		workTool.isLookingForBales = false
 		if turnOn ~= workTool.loadingIsActive and workTool.fillLevel < workTool.capacity then
@@ -500,38 +501,11 @@ function courseplay:handleSpecialTools(self,workTool,unfold,lower,turnOn,allowed
 		if workTool.unloadingIsActive then
 			allowedToDrive = false
 		end
-		
-		return true, allowedToDrive, forceSpeedLimit
-	elseif workTool.cp.isRopaEuroTiger then
-		if lower then
-			workTool:setSteeringMode(5)
-		else
-			workTool:setSteeringMode(4);
-		end
-	
-	elseif workTool.cp.isHolmerDlcCrabSteeringPossible or (workTool.attacherVehicle ~= nil and workTool.attacherVehicle.cp.isHolmerDlcCrabSteeringPossible) then
-		local tractor = workTool.attacherVehicle;
-		if workTool.cp.isHolmerTerraDosT4_40 or workTool.cp.isHolmerTerraVariant then
-			tractor = workTool;
-		end
-		if tractor.cp.hasCrabSteeringActive then
-			local nextRidgeMarker = tractor.Waypoints[math.min(tractor.cp.waypointIndex+ tractor.cp.ridgeMarkerIndex ,tractor.cp.numWaypoints)].ridgeMarker
-			local onField = nextRidgeMarker == ridgeMarker;
-			local state = tractor.crabSteering.stateTarget;
-			if implementsDown and onField then
-				if ridgeMarker == 1 and state ~= 3 then
-					tractor:setCrabSteering(3);
-				elseif ridgeMarker ==2 and state ~= 2 then
 
-				tractor:setCrabSteering(2);
-				end				
-			elseif tractor.cp.isHolmerTerraDosT4_40 and state ~= 1 and not forcedStop then 
-				tractor:setCrabSteering(1);
-			elseif tractor.cp.isHolmerTerraVariant and state ~= 0 and not forcedStop then 
-				tractor:setCrabSteering(0);
-			end
-		end	
+		return true, allowedToDrive, forceSpeedLimit
 	end;
+
+
 
 	return false, allowedToDrive,forceSpeedLimit;
 end
@@ -605,18 +579,6 @@ function courseplay:askForSpecialSettings(self, object)
 		self.cp.noStopOnEdge = true
 		self.cp.noStopOnTurn = true
 		automaticToolOffsetX = -2.5;
-	elseif object.cp.isZunhammerVibro  then
-		local tractor = object.attacherVehicle; 
-		if tractor.cp.noStopOnEdge then
-			tractor.cp.noStopOnEdge = false;
-			tractor.cp.noStopOnTurn = false;
-		end
-	elseif self.cp.isHolmerTerraDosT4_40 then
-		self.cp.noStopOnTurn = true;
-		self.cp.noStopOnEdge = true;
-		self.cp.backMarkerOffset = 4.5;
-		self.isStrawEnabled = false;
-		courseplay:debug(string.format("%s backMarkerOffset set to 4.5",self.name),6)	
 	end;
 
 	if self.cp.mode == courseplay.MODE_LIQUIDMANURE_TRANSPORT then

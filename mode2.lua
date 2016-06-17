@@ -167,7 +167,21 @@ function courseplay:handle_mode2(vehicle, dt)
 					if combine.acParameters ~= nil and combine.acParameters.enabled and combine.isHired  and fillLevel >= 0.99*capacity then --AC stops at 99% fillLevel so we have to set this as full
 						combine.cp.wantsCourseplayer = true
 					end
-					if (fillLevel >= (capacity * vehicle.cp.followAtFillLevel / 100)) or capacity == 0 or combine.cp.wantsCourseplayer then
+					--Start Tom Edit
+					-- print("vehicle fill level");
+					-- print(vehicle.cp.tipperFillLevel);
+					-- print("vehicle fill capacity");
+					-- print(vehicle.cp.tipperCapacity);
+					local remainingspace = vehicle.cp.tipperCapacity - vehicle.cp.tipperFillLevel;
+					--print("Remaining Space: "..remainingspace);
+					if fillLevel>=remainingspace and vehicle.cp.tipperFillLevel >= 50 then
+						combine.cp.hasRemaining = true
+						print("Combine found with enough to fill me up.");
+					else
+						combine.cp.hasRemaining = false
+					end;
+					--end Tom Edit Also add combine.cp.hasRemaining to next if statement
+					if (fillLevel >= (capacity * vehicle.cp.followAtFillLevel / 100)) or capacity == 0 or combine.cp.wantsCourseplayer or combine.cp.hasRemaining then
 						if capacity == 0 then
 							if combine.courseplayers == nil then
 								vehicle.cp.bestCombine = combine
@@ -237,6 +251,8 @@ function courseplay:unload_combine(vehicle, dt)
 		if  not currentTipper.cp.realUnloadOrFillNode then
 			currentTipper.cp.realUnloadOrFillNode = courseplay:getRealUnloadOrFillNode(currentTipper);
 		end;
+		--print("fillNode")
+		--print(currentTipper.cp.realUnloadOrFillNode)
 		xt, yt, zt = worldToLocal(currentTipper.cp.realUnloadOrFillNode, x, y, z)
 	else
 		--courseplay:debug(nameNum(vehicle) .. ": no cp.currentTrailerToFillSet", 4);
@@ -406,7 +422,7 @@ function courseplay:unload_combine(vehicle, dt)
 
 	-- STATE 4 (drive to rear of combine)
 	elseif vehicle.cp.modeState == 4 then
-		if combine.cp.offset == nil or vehicle.cp.combineOffset == 0 or combine.cp.isHolmerDlcCrabSteeringPossible then
+		if combine.cp.offset == nil or vehicle.cp.combineOffset == 0 then
 			--print("offset not saved - calculate")
 			courseplay:calculateCombineOffset(vehicle, combine);
 		elseif not combine.cp.isChopper and not combine.cp.isSugarBeetLoader and vehicle.cp.combineOffsetAutoMode and vehicle.cp.combineOffset ~= combine.cp.offset then
@@ -488,7 +504,7 @@ function courseplay:unload_combine(vehicle, dt)
 			local nodeSet = false
 			if workWidth < offset then
 				local diff = max (1.5,workWidth/2)
-				if  combine.cp.isHarvesterAttachable or combine.cp.hasCrabSteeringActive then
+				if  combine.cp.isHarvesterAttachable then
 					diff = 5
 				end
 				fruitSide = courseplay:sideToDrive(vehicle, combine, 0);
@@ -504,7 +520,7 @@ function courseplay:unload_combine(vehicle, dt)
 			else
 				sideMultiplier = 1;				
 			end
-			if combineIsTurning or vehicle.cp.forceNewTargets then
+			if combineIsTurning or vehicle.cp.forceNewTargets then --Tom Edit 
 				vehicle.cp.curTarget.x, vehicle.cp.curTarget.y, vehicle.cp.curTarget.z = localToWorld(currentTipper.rootNode, -sideMultiplier*turnDiameter, 0, trailerOffset);
 				courseplay:debug(string.format("%s: combine is empty and turning",nameNum(vehicle)),4)
 				if combineIsAutoCombine then
@@ -540,6 +556,7 @@ function courseplay:unload_combine(vehicle, dt)
 					vehicle.cp.curTarget.x, vehicle.cp.curTarget.y, vehicle.cp.curTarget.z = localToWorld(currentTipper.rootNode, sideMultiplier*offset*0.8 , 0, totalLength + trailerOffset);
 				end
 				courseplay:addNewTargetVector(vehicle, sideMultiplier*offset ,(totalLength*3)+trailerOffset,currentTipper);
+				--courseplay:addNewTargetVector(vehicle, 0 ,(totalLength*3)+trailerOffset,currentTipper);
 				courseplay:setModeState(vehicle, 9);				
 			end
 
@@ -659,6 +676,9 @@ function courseplay:unload_combine(vehicle, dt)
 		local x,y,z = getWorldTranslation(combineDirNode)
 		local _,_,combineDistance = worldToLocal(vehicle.cp.DirectionNode, x,y,z)
 		local backupDistance = worldToLocal(combineDirNode, tx,ty,tz)
+		print("combineDistance: "..combineDistance)
+		print("swayPointdistance :"..vehicle.cp.swayPointDistance + 3)
+		print("backupDistance :"..backupDistance)
 		if combineDistance > vehicle.cp.swayPointDistance + 3 or backupDistance < -5 then
 			vehicle.cp.swayPointDistance = nil
 			courseplay:setModeState(vehicle, 5);

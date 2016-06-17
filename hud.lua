@@ -1064,6 +1064,17 @@ function courseplay.hud:loadPage(vehicle, page)
 		-- line 6 = headland
 		vehicle.cp.hud.content.pages[8][6][1].text = courseplay:loc('COURSEPLAY_HEADLAND');
 		vehicle.cp.hud.content.pages[8][6][2].text = vehicle.cp.headland.numLanes ~= 0 and tostring(vehicle.cp.headland.numLanes) or '-';
+		
+		-- line 7 = headland only
+		
+		-- vehicle.cp.hud.content.pages[8][7][1].text = "Headland Only?";
+		-- vehicle.cp.hud.content.pages[8][7][2].text = vehicle.cp.headLandOnly and courseplay:loc('COURSEPLAY_ACTIVATED') or courseplay:loc('COURSEPLAY_DEACTIVATED');
+		
+		-- line 8 = wait point selection
+		
+		-- vehicle.cp.hud.content.pages[8][8][1].text = "Start/Finish Waitpoints";
+		-- vehicle.cp.hud.content.pages[8][8][2].text = vehicle.cp.GenWP ~= nil and courseplay:loc(string.format('COURSEPLAY_GENWP_%d', vehicle.cp.GenWP)) or '---';
+		
 
 
 	-- PAGE 9: SHOVEL SETTINGS
@@ -1572,6 +1583,13 @@ function courseplay.hud:setupVehicleHud(vehicle)
 	courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'navUp' },   'changeHeadlandNumLanes',   1, self.buttonPosX[2], self.linesButtonPosY[6], wSmall, hSmall, 6, nil, false);
 	courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'navDown' }, 'changeHeadlandNumLanes',  -1, self.buttonPosX[1], self.linesButtonPosY[6], wSmall, hSmall, 6, nil, false);
 
+	-- line 7 headland only
+	-- courseplay.button:new(vehicle, 8, nil, 'toggleHeadLandOnly', nil ,self.col1posX, self.linesPosY[7], self.contentMaxWidth, self.lineHeight, 7, nil ,true);
+	
+	-- line 8 waitpoint selection
+	
+	-- courseplay.button:new(vehicle, 8, nil, 'toggleGenWP', nil, self.col1posX, self.linesPosY[8], self.contentMaxWidth, self.lineHeight, 8, nil, true);
+	
 	-- generation action button
 	local toolTip = 'Generate field course'; -- TODO: i18n
 	vehicle.cp.hud.generateCourseButton = courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'generateCourse' }, 'generateCourse', nil, topIconsX[2], self.topIconsY, wMiddle, hMiddle, nil, nil, false, false, false, toolTip);

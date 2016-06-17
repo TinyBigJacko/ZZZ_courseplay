@@ -401,8 +401,8 @@ function courseplay:findSpecialTriggerCallback(transformId, x, y, z, distance)
 			courseplay:debug(('%s: trigger %s is from my own implement'):format(nameNum(self), tostring(transformId)), 19);
 			return true
 		end
-	end	
-
+	end
+	
 	-- OTHER TRIGGERS
 	if courseplay.triggers.allNonUpdateables[transformId] then
 		local trigger = courseplay.triggers.allNonUpdateables[transformId];
@@ -504,11 +504,60 @@ function courseplay:updateAllTriggers()
 						courseplay:debug('\t\tadd SowingMachineFillTrigger', 1);
 
 					-- SprayerFillTriggers
-					elseif trigger.fillType and trigger.fillType == Fillable.FILLTYPE_FERTILIZER then
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_FERTILIZER)  then
 						trigger.isSprayerFillTrigger = true;
 						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
 						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
 
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_FERTILIZER2)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+						
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_FERTILIZER3)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_HERBICIDE)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_HERBICIDE2)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_HERBICIDE3)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_HERBICIDE4)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_HERBICIDE5)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_HERBICIDE6)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_KALK)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);
+
+					elseif trigger.fillType and (trigger.fillType == Fillable.FILLTYPE_WATER)  then
+						trigger.isSprayerFillTrigger = true;
+						courseplay:cpAddTrigger(triggerId, trigger, 'sprayer', 'nonUpdateable');
+						courseplay:debug('\t\tadd SprayerFillTrigger', 1);						
 					-- WaterTrailerFillTriggers
 					elseif trigger.isa and trigger:isa(WaterTrailerFillTrigger) then
 						trigger.isWaterTrailerFillTrigger = true;

@@ -683,12 +683,14 @@ function courseplay:getToolTurnRadius(workTool)
 
 		-- WE ARE A PIVOTED TRAILER / IMPLEMENT
 		if workToolDistances.attacherJointToPivot then
-			local pivotRotMax = 0;
+			local pivotRotMax = 15;
 			local _, _, rotLimits = courseplay:findJointNodeConnectingToNode(workTool, workTool.attacherJoint.rootNode, workTool.rootNode);
 			if rotLimits then
 				for _, rotLimit in pairs(rotLimits) do
 					if rotLimit[2] > pivotRotMax and rotLimit[2] > rad(15) then
 						pivotRotMax = rotLimit[2];
+
+
 					end;
 				end;
 			end;
@@ -929,7 +931,6 @@ function courseplay:getWheelBase(vehicle, fromTurningNode)
 
 		wheelBase = abs(maxDis - minDis);
 	end;
-
 	return wheelBase;
 end;
 

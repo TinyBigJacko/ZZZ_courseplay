@@ -150,6 +150,10 @@
 		<text name="COURSEPLAY_START" 									 text="Start" />
 		<text name="COURSEPLAY_FINISH" 									 text="Finish" />
 		<text name="COURSEPLAY_NO_VALID_COURSE" 						 text="Course is not valid" />
+		<text name="COURSEPLAY_GENWP_1"									 text="Beginning" />
+		<text name="COURSEPLAY_GENWP_2"   								 text="End" />
+		<text name="COURSEPLAY_GENWP_3"									 text="Both" />
+		<text name="COURSEPLAY_GENWP_4"  								 text="None" />
 
 		<!-- shovel stuff -->
 		<text name="COURSEPLAY_SHOVEL_NOT_FOUND" 						 text="No shovel could be found" />

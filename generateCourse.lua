@@ -92,6 +92,7 @@ function courseplay:generateCourse(vehicle)
 
 		local orderCW = vehicle.cp.headland.userDirClockwise;
 		local numLanes = vehicle.cp.headland.numLanes;
+		local headLandOnly = vehicle.cp.headLandOnly;
 		local polyPoints = poly.points;
 		local polyLength = poly.numPoints;
 
@@ -111,7 +112,7 @@ function courseplay:generateCourse(vehicle)
 				end;
 			end;
 
-			local offsetWidth, noGoWidth = self:getOffsetWidth(vehicle, curLane);
+			local offsetWidth, noGoWidth = self:getOffsetWidth(vehicle, curLane, numLanes);
 			courseplay:debug(string.format('headland lane %d: laneRidgeMarker=%d, offset offsetWidth=%.1f, noGoWidth=%.2f', curLane, laneRidgeMarker, offsetWidth, noGoWidth), 7);
 
 			-- --------------------------------------------------
@@ -409,6 +410,7 @@ function courseplay:generateCourse(vehicle)
 	---#################################################################
 	-- (3) DIMENSIONS, ALL PATH POINTS
 	--------------------------------------------------------------------
+
 	courseplay:debug('(3) DIMENSIONS, ALL PATH POINTS', 7);
 
 	local _, _, dimensions = courseplay.fields:getPolygonData(poly.points, nil, nil, true, true);
@@ -421,7 +423,9 @@ function courseplay:generateCourse(vehicle)
 	local pointDistance = 5;
 	local pipSafety = 0.1;
 	local pathPoints = {};
-
+	if vehicle.cp.headLandOnly  then
+		workWidth = 30;
+	end
 	if dir == "N" or dir == "S" then --North or South
 		numLanes = math.ceil(dimensions.width / workWidth);
 		pointsPerLane = math.ceil(dimensions.height / pointDistance);
@@ -840,9 +844,13 @@ function courseplay:generateCourse(vehicle)
 			for i=1, #(vehicle.cp.headland.lanes) do
 				vehicle.Waypoints = tableConcat(vehicle.Waypoints, vehicle.cp.headland.lanes[i]);
 			end;
-			vehicle.Waypoints = tableConcat(vehicle.Waypoints, fieldWorkCourse);
+			if not vehicle.cp.headLandOnly then
+				vehicle.Waypoints = tableConcat(vehicle.Waypoints, fieldWorkCourse);
+			end
 		else
-			vehicle.Waypoints = tableConcat(vehicle.Waypoints, fieldWorkCourse);
+			if not vehicle.cp.headLandOnly then
+				vehicle.Waypoints = tableConcat(vehicle.Waypoints, fieldWorkCourse);
+			end
 			for i=1, #(vehicle.cp.headland.lanes) do
 				vehicle.Waypoints = tableConcat(vehicle.Waypoints, vehicle.cp.headland.lanes[i]);
 			end;
@@ -870,10 +878,16 @@ function courseplay:generateCourse(vehicle)
 
 	courseplay:setWaypointIndex(vehicle, 1);
 	vehicle:setCpVar('canDrive',true,courseplay.isClient);
-	vehicle.Waypoints[1].wait = true;
-	vehicle.Waypoints[1].crossing = true;
-	vehicle.Waypoints[vehicle.cp.numWaypoints].wait = true;
-	vehicle.Waypoints[vehicle.cp.numWaypoints].crossing = true;
+	if vehicle.cp.GenWP == 1 or vehicle.cp.GenWP == 3 then
+		vehicle.Waypoints[1].wait = true;
+		vehicle.Waypoints[1].crossing = true;
+	end;
+	
+	if vehicle.cp.GenWP == 2 or vehicle.cp.GenWP == 3 then
+		vehicle.Waypoints[vehicle.cp.numWaypoints].wait = true;
+		vehicle.Waypoints[vehicle.cp.numWaypoints].crossing = true;
+	end
+	
 	vehicle.cp.numCourses = 1;
 	courseplay.signs:updateWaypointSigns(vehicle);
 
@@ -1047,11 +1061,19 @@ function courseplay.generation:getPointDirection(cp, np, useC)
 	return dx, dz, vl;
 end;
 
-function courseplay.generation:getOffsetWidth(vehicle, laneNum)
+function courseplay.generation:getOffsetWidth(vehicle, laneNum, numLanes)
 	local w = vehicle.cp.workWidth;
-	if laneNum == 1 then
+	if numLanes == 1 then 
 		w = w/2;
-	end;
+	elseif numLanes == 2 and laneNum == 1 then
+		w = 0.1;
+	elseif numLanes == 2 and laneNum == 2 then
+		w = (2*w)/3;
+	end
+	
+	-- if laneNum == 1 then
+		-- w = w/2;
+	-- end;
 	local noGoWidth = w * vehicle.cp.headland.noGoWidthRatio;
 	return w, noGoWidth;
 end;

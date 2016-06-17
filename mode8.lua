@@ -8,11 +8,19 @@ function courseplay:handleMode8(vehicle, load, unload, allowedToDrive, lx, lz, d
 
 	-- LOADING
 	if load then
+		local workTool = vehicle.cp.workTools[1];
 		courseplay:doTriggerRaycasts(vehicle, 'specialTrigger', 'fwd', true, tx, ty, tz, nx, ny, nz);
 		allowedToDrive, lx, lz = courseplay:refillWorkTools(vehicle, vehicle.cp.tipperFillLevelPct, vehicle.cp.refillUntilPct, allowedToDrive, lx, lz, dt);
-
+		--milk trailers
+		 if workTool.cp.isMilkTrailer then
+			local isSpecialTool, allowedToDrive = courseplay:handleSpecialTools(vehicle, workTool, nil,    nil,   nil,    allowedToDrive, true,  nil );
+			--print("fillLevel")
+			--print(vehicle.cp.tipperFillLevelPct)
+			return allowedToDrive, lx, lz;
+		 end;
 	-- UNLOADING
 	elseif unload then
+		--print("unload")
 		local workTool = vehicle.cp.workTools[1];
 
 		CpManager:setGlobalInfoText(vehicle, 'OVERLOADING_POINT');
@@ -55,8 +63,9 @@ function courseplay:handleMode8(vehicle, load, unload, allowedToDrive, lx, lz, d
 		-- fuel trailers
 		elseif workTool.cp.isFuelTrailer then
 			-- do nothing
-
-
+		--milk trailers
+		elseif workTool.cp.isMilkTrailer then
+			local isSpecialTool, allowedToDrive, lx, lz = courseplay:handleSpecialTools(vehicle, workTool, nil,    nil,   nil,    allowedToDrive, nil,   true  );
 		-- water trailers
 		elseif workTool.cp.isWaterTrailer then
 			-- check if workTool is in waterReceiver trigger
@@ -166,7 +175,9 @@ function courseplay:handleMode8(vehicle, load, unload, allowedToDrive, lx, lz, d
 				workTool.cp.waterReceiverTrigger = nil;
 			end;
 		end;
+		
 	end;
-
+	-- print("handlemode8 return")
+	-- print(allowedToDrive)
 	return allowedToDrive, lx, lz;
 end;

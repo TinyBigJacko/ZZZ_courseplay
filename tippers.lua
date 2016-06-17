@@ -229,7 +229,7 @@ function courseplay:updateWorkTools(vehicle, workTool, isImplement)
 
 	-- MODE 8: LIQUID MANURE TRANSFER
 	elseif vehicle.cp.mode == 8 then
-		if workTool.cp.hasSpecializationFillable and ((workTool.getOverloadingTrailerInRangePipeState ~= nil or workTool.setIsReFilling ~= nil) or workTool.cp.isFuelTrailer or workTool.cp.isWaterTrailer) then
+		if workTool.cp.hasSpecializationFillable and ((workTool.getOverloadingTrailerInRangePipeState ~= nil or workTool.setIsReFilling ~= nil) or workTool.cp.isFuelTrailer or workTool.cp.isWaterTrailer or workTool.cp.isMilkTrailer) then
 			hasWorkTool = true;
 			vehicle.cp.workTools[#vehicle.cp.workTools + 1] = workTool;
 			vehicle.cp.hasMachinetoFill = true;

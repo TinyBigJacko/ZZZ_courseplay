@@ -383,6 +383,8 @@ function courseplay:load(xmlFile)
 	self.cp.hasStartingDirection = false;
 	self.cp.returnToFirstPoint = false;
 	self.cp.hasGeneratedCourse = false;
+	self.cp.headLandOnly = false;
+	self.cp.GenWP = 3;
 	self.cp.hasValidCourseGenerationData = false;
 	self.cp.ridgeMarkersAutomatic = true;
 	self.cp.headland = {

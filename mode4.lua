@@ -47,7 +47,14 @@ function courseplay:handle_mode4(self, allowedToDrive, workSpeed, fillLevelPct, 
 		end
 	end
 	-- save last point
-	if (fillLevelPct == 0 or self.cp.urfStop) and workArea then
+
+	local refillPct = 6
+	if (self.cp.stopWork - self.cp.previousWaypointIndex) < 20 then
+		refillPct = 1
+	end 
+	--print("inital refillPct");
+	--print(refillPct);
+	if ((fillLevelPct < refillPct) or self.cp.urfStop) and workArea then
 		self.cp.urfStop = false
 		if self.cp.hasUnloadingRefillingCourse and self.cp.abortWork == nil then
 			self.cp.abortWork = self.cp.waypointIndex -10

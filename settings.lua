@@ -963,6 +963,17 @@ function courseplay:toggleReturnToFirstPoint(vehicle)
 	vehicle.cp.returnToFirstPoint = not vehicle.cp.returnToFirstPoint;
 end;
 
+function courseplay:toggleHeadLandOnly(vehicle)
+	vehicle.cp.headLandOnly = not vehicle.cp.headLandOnly;
+end;
+
+function courseplay:toggleGenWP(vehicle)
+	vehicle.cp.GenWP = vehicle.cp.GenWP + 1;
+	if vehicle.cp.GenWP > 4 then
+		vehicle.cp.GenWP = 1;
+	end
+end;
+
 function courseplay:changeHeadlandNumLanes(vehicle, changeBy)
 	vehicle.cp.headland.numLanes = Utils.clamp(vehicle.cp.headland.numLanes + changeBy, 0, vehicle.cp.headland.maxNumLanes);
 	courseplay:validateCourseGenerationData(vehicle);

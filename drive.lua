@@ -11,7 +11,7 @@ function courseplay:drive(self, dt)
 	if self.steeringEnabled then
 		self.steeringEnabled = false;
 	end
-		
+	
 	-- debug for workAreas
 	if courseplay.debugChannels[6] then
 		local tx1, ty1, tz1 = localToWorld(self.cp.DirectionNode,3,1,self.cp.aiFrontMarker)
@@ -33,6 +33,9 @@ function courseplay:drive(self, dt)
 
 	-- TIPPER FILL LEVELS (get once for all following functions)
 	self.cp.tipperFillLevel, self.cp.tipperCapacity = self:getAttachedTrailersFillLevelAndCapacity();
+	--print("fill level and Cap")
+	--print(self.cp.tipperFillLevel)
+	--print(self.cp.tipperCapacity)
 	if self.cp.tipperFillLevel == nil then self.cp.tipperFillLevel = 0; end;
 	if self.cp.tipperCapacity == nil or self.cp.tipperCapacity == 0 then self.cp.tipperCapacity = 0.00001; end;
 	self.cp.tipperFillLevelPct = self.cp.tipperFillLevel * 100 / self.cp.tipperCapacity;
@@ -61,7 +64,7 @@ function courseplay:drive(self, dt)
 
 	-- Turn on sound / control lights
 	if not self.isControlled then
-		self:setLightsVisibility(CpManager.lightsNeeded);
+		self:setLightsVisibility(false);
 	end;
 
 	-- current position
@@ -163,7 +166,22 @@ function courseplay:drive(self, dt)
 		if self.cp.waitTimer == nil and self.cp.waitTime > 0 then
 			self.cp.waitTimer = self.timer + self.cp.waitTime * 1000;
 		end;
+		if self.cp.mode ==1 and self.cp.tipperFillLevel ~= nil then
+			--print("I'm at a wait point in Mode 1")
+				if courseplay:timerIsThrough(self, "fillLevelChange") or self.cp.prevFillLevelPct == nil then
+					print("checking fill level")
+					if self.cp.prevFillLevelPct ~= nil and self.cp.tipperFillLevelPct == self.cp.prevFillLevelPct then
+						drive_on = true
+						courseplay:setVehicleWait(self, false);
+						self.cp.prevFillLevelPct = nil
+						print("driving on")		
+					end
+					self.cp.prevFillLevelPct = self.cp.tipperFillLevelPct
+					courseplay:setCustomTimer(self, "fillLevelChange", 1);
+				end
 
+			
+		end
 		if self.cp.mode == 3 and self.cp.workToolAttached then
 			courseplay:handleMode3(self, self.cp.tipperFillLevelPct, allowedToDrive, dt);
 
