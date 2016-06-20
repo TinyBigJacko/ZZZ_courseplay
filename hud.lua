@@ -1067,7 +1067,7 @@ function courseplay.hud:loadPage(vehicle, page)
 		
 		-- line 7 = headland only
 		
-		-- vehicle.cp.hud.content.pages[8][7][1].text = "Headland Only?";
+		vehicle.cp.hud.content.pages[8][7][1].text = "Headland Only?";
 		-- vehicle.cp.hud.content.pages[8][7][2].text = vehicle.cp.headLandOnly and courseplay:loc('COURSEPLAY_ACTIVATED') or courseplay:loc('COURSEPLAY_DEACTIVATED');
 		
 		-- line 8 = wait point selection
