@@ -1065,9 +1065,9 @@ function courseplay.generation:getOffsetWidth(vehicle, laneNum, numLanes)
 	local w = vehicle.cp.workWidth;
 	if numLanes == 1 then 
 		w = w/2;
-	elseif numLanes == 2 and laneNum == 1 then
+	elseif numLanes > 1 and laneNum == 1 then
 		w = 0.1;
-	elseif numLanes == 2 and laneNum == 2 then
+	elseif numLanes > 1 and laneNum > 1 then
 		w = (2*w)/3;
 	end
 	
