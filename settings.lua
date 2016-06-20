@@ -979,6 +979,10 @@ function courseplay:changeHeadlandNumLanes(vehicle, changeBy)
 	courseplay:validateCourseGenerationData(vehicle);
 end;
 
+function courseplay:changeLaneEndOffset(vehicle, changeBy)
+	vehicle.cp.laneEndOffset = Utils.clamp(vehicle.cp.laneEndOffset + changeby, 0 , vehicle.cp.headland.numLanes);
+end;
+
 function courseplay:toggleHeadlandDirection(vehicle)
 	vehicle.cp.headland.userDirClockwise = not vehicle.cp.headland.userDirClockwise;
 	vehicle.cp.headland.directionButton:setSpriteSectionUVs(vehicle.cp.headland.userDirClockwise and 'headlandDirCW' or 'headlandDirCCW');

@@ -1065,10 +1065,11 @@ function courseplay.hud:loadPage(vehicle, page)
 		vehicle.cp.hud.content.pages[8][6][1].text = courseplay:loc('COURSEPLAY_HEADLAND');
 		vehicle.cp.hud.content.pages[8][6][2].text = vehicle.cp.headland.numLanes ~= 0 and tostring(vehicle.cp.headland.numLanes) or '-';
 		
-		-- line 7 = headland only
-		
-		vehicle.cp.hud.content.pages[8][7][1].text = "Headland Only?";
-		-- vehicle.cp.hud.content.pages[8][7][2].text = vehicle.cp.headLandOnly and courseplay:loc('COURSEPLAY_ACTIVATED') or courseplay:loc('COURSEPLAY_DEACTIVATED');
+		-- line 7 = land end offset
+		if vehicle.cp.headland.numLanes > 0 then
+			vehicle.cp.hud.content.pages[8][7][1].text = "Lane End Offset:";
+			vehicle.cp.hud.content.pages[8][7][2].text = tostring(vehicle.cp.laneEndOffset);
+		end
 		
 		-- line 8 = wait point selection
 		
@@ -1584,6 +1585,10 @@ function courseplay.hud:setupVehicleHud(vehicle)
 	courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'navDown' }, 'changeHeadlandNumLanes',  -1, self.buttonPosX[1], self.linesButtonPosY[6], wSmall, hSmall, 6, nil, false);
 
 	-- line 7 headland only
+	if vehicle.cp.headland.numLanes > 0 then
+		courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'navUp' },   'changeLaneEndOffset',   1, self.buttonPosX[2], self.linesButtonPosY[7], wSmall, hSmall, 7, nil, false);
+		courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'navDown' }, 'changeLaneEndOffset',  -1, self.buttonPosX[1], self.linesButtonPosY[7], wSmall, hSmall, 7, nil, false);
+	end
 	-- courseplay.button:new(vehicle, 8, nil, 'toggleHeadLandOnly', nil ,self.col1posX, self.linesPosY[7], self.contentMaxWidth, self.lineHeight, 7, nil ,true);
 	
 	-- line 8 waitpoint selection
