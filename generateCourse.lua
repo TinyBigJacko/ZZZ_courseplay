@@ -399,7 +399,11 @@ function courseplay:generateCourse(vehicle)
 
 		--base field work course on headland path
 		if numCreatedLanes > 0 then
-			poly.points = vehicle.cp.headland.lanes[numCreatedLanes]; --up/down based on last offset lane (= 1/2 workWidth overlap) - TODO: smaller overlap (1/4) ?
+			if numCreatedLanes = 1 then
+				poly.points = vehicle.cp.headland.lanes[numCreatedLanes]; --up/down based on last offset lane (= 1/2 workWidth overlap) - TODO: smaller overlap (1/4) ?
+			else
+				poly.points = vehicle.cp.headland.lanes[numCreatedLanes-1]; --up/down based on last offset lane (= 1/2 workWidth overlap) - TODO: smaller overlap (1/4) ?
+			end
 			poly.numPoints = #(poly.points);
 			courseplay:debug(string.format('headland: numCreatedLanes=%d -> poly=%s, poly.points=%s, poly.numPoints=%s, #poly.points=%s', numCreatedLanes, tostring(poly), tostring(poly.points), tostring(poly.numPoints), tostring(poly.points and #poly.points or 'nil')), 7);
 		end;
