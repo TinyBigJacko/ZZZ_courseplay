@@ -1585,10 +1585,10 @@ function courseplay.hud:setupVehicleHud(vehicle)
 	courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'navDown' }, 'changeHeadlandNumLanes',  -1, self.buttonPosX[1], self.linesButtonPosY[6], wSmall, hSmall, 6, nil, false);
 
 	-- line 7 headland only
-	if vehicle.cp.headland.numLanes > 0 then
+
 		courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'navUp' },   'changeLaneEndOffset',   1, self.buttonPosX[2], self.linesButtonPosY[7], wSmall, hSmall, 7, nil, false);
 		courseplay.button:new(vehicle, 8, { 'iconSprite.png', 'navDown' }, 'changeLaneEndOffset',  -1, self.buttonPosX[1], self.linesButtonPosY[7], wSmall, hSmall, 7, nil, false);
-	end
+
 	-- courseplay.button:new(vehicle, 8, nil, 'toggleHeadLandOnly', nil ,self.col1posX, self.linesPosY[7], self.contentMaxWidth, self.lineHeight, 7, nil ,true);
 	
 	-- line 8 waitpoint selection

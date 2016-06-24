@@ -980,7 +980,9 @@ function courseplay:changeHeadlandNumLanes(vehicle, changeBy)
 end;
 
 function courseplay:changeLaneEndOffset(vehicle, changeBy)
-	vehicle.cp.laneEndOffset = Utils.clamp(vehicle.cp.laneEndOffset + changeby, 0 , vehicle.cp.headland.numLanes);
+	print("function works")
+	print(changeBy)
+	vehicle.cp.laneEndOffset = Utils.clamp(vehicle.cp.laneEndOffset + changeBy, 0 , vehicle.cp.headland.numLanes - 1);
 end;
 
 function courseplay:toggleHeadlandDirection(vehicle)
